@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "AI Elder Healthcare Plus",
+    "slug": "ai-elder-healthcare-plus",
+    "version": "1.0.0",
+    "sdkVersion": "48.0.0",
+    "extra": {
+      "SUPABASE_URL": "https://proj-ref.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.exampleanonkey"
+    }
+  }
+}

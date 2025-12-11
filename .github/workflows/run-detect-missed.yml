@@ -13,7 +13,7 @@ jobs:
       - name: Call Supabase Edge Function (detect-missed)
         run: |
           curl -X POST \
-          "${{ secrets.SUPABASE_EDGE_FUNCTION_URL }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+          "${{ secrets.https://tfyzepwbamhhmvwakjww.supabase.co/functions/v1/detect-missed }}" \
+          -H "Authorization: Bearer ${{ secrets.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmeXplcHdiYW1oaG12d2Frand3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTM3ODc3OCwiZXhwIjoyMDgwOTU0Nzc4fQ.maKyY7kDm7jEA6rpOOy-aggeoWFSlhjMQda_4I5-gD8 }}" \
           -H "Content-Type: application/json" \
           -d '{}'

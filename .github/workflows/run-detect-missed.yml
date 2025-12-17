@@ -1,16 +1,16 @@
-name: Run detect-missed
+name: Run detect-missed every 5 minutes
 
 on:
   schedule:
-    - cron: "*/5 * * * *" # runs every 5 minutes
-  workflow_dispatch: # allows manual RUN WORKFLOW
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
 
 jobs:
-  run-detect-missed:
+  call-edge-function:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Call Supabase Edge Function (detect-missed)
+      - name: Call Supabase Edge Function
         run: |
           curl -X POST \
             "${{ secrets.SUPABASE_EDGE_FUNCTION_URL }}" \

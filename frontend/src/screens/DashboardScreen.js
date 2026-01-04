@@ -1,60 +1,75 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, Button, ActivityIndicator } from 'react-native';
 import { supabase } from '../api/supabase';
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
-  const [medicines, setMedicines] = useState([]);
-  const [errorText, setErrorText] = useState('');
+  const [count, setCount] = useState(0);
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    console.log('Dashboard mounted');
-    loadMedicines();
+    init();
   }, []);
 
-  async function loadMedicines() {
-    try {
-      console.log('Fetching medicines...');
-      
-      const { data, error } = await supabase
-        .from('medicines')
-        .select('*');
+  async function init() {
+    setLoading(true);
 
-      console.log('Supabase response:', data, error);
+    const { data: authData } = await supabase.auth.getUser();
+    console.log('AUTH USER:', authData?.user);
 
-      if (error) {
-        setErrorText(error.message);
-      } else {
-        setMedicines(data || []);
-      }
-    } catch (err) {
-      console.log('Caught error:', err);
-      setErrorText('Unexpected error');
-    } finally {
+    if (!authData?.user) {
       setLoading(false);
+      return;
     }
+
+    setUserEmail(authData.user.email);
+
+    const { data, error } = await supabase
+      .from('medicines')
+      .select('*');
+
+    if (!error && data) {
+      setCount(data.length);
+    }
+
+    setLoading(false);
   }
 
+  // ⏳ Loading screen
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
-        <Text>Loading medicines...</Text>
+        <Text>Loading Dashboard...</Text>
       </View>
     );
   }
 
-  if (errorText) {
+  // 🚨 Not logged in (temporary safety)
+  if (!userEmail) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Error: {errorText}</Text>
+        <Text>User not logged in</Text>
+        <Button title="Go to Login" onPress={() => navigation.replace('Login')} />
       </View>
     );
   }
 
+  // ✅ Normal dashboard
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Medicines Loaded: {medicines.length}</Text>
+    <View style={{ flex: 1, padding: 20, justifyContent: 'center' }}>
+      <Text style={{ fontSize: 18, marginBottom: 10 }}>
+        Welcome: {userEmail}
+      </Text>
+
+      <Text style={{ fontSize: 18, marginBottom: 20 }}>
+        Medicines Loaded: {count}
+      </Text>
+
+      <Button
+        title="Add Medicine"
+        onPress={() => navigation.navigate('AddMedicine')}
+      />
     </View>
   );
 }

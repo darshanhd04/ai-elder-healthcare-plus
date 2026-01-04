@@ -1,30 +1,54 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { supabase } from '../api/supabase';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin() {
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    if (error) alert(error.message);
-    else {
-      alert('Check your email');
-      navigation.navigate('Dashboard');
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      Alert.alert('Login failed', error.message);
+      return;
+    }
+
+    if (data?.user) {
+      navigation.replace('Dashboard');
     }
   }
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text>Login</Text>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text>Email</Text>
       <TextInput
-        placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={{ borderWidth: 1, padding: 8, marginVertical: 8 }}
+        autoCapitalize="none"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Register" onPress={() => navigation.navigate('Register')} />
+
+      <Text>Password</Text>
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={{ borderWidth: 1, marginBottom: 20, padding: 8 }}
+      />
+
+      <Button
+        title={loading ? 'Logging in...' : 'Login'}
+        onPress={handleLogin}
+      />
     </View>
   );
 }

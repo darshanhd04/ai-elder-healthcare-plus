@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { supabase } from '../api/supabase';
+import { registerForPushNotifications } from '../utils/registerForPushNotifications';
 
 export default function DashboardScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,9 @@ export default function DashboardScreen({ navigation }) {
     }
 
     setUserEmail(authData.user.email);
+
+    // 🔔 REGISTER FOR PUSH NOTIFICATIONS (ADDED)
+    await registerForPushNotifications();
 
     // 🔔 Reminder check (Edge Function)
     await supabase.functions.invoke('detect-missed');

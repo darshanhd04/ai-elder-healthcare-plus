@@ -2,16 +2,19 @@
   "expo": {
     "name": "AI Elder Healthcare Plus",
     "slug": "ai-elder-healthcare-plus",
-    "platforms": [
-      "android", "web"
-    ],
+    "platforms": ["android", "web"],
     "version": "1.0.0",
     "sdkVersion": "48.0.0",
     "jsEngine": "jsc",
+
     "extra": {
       "SUPABASE_URL": "https://tfyzepwbamhhmvwakjww.supabase.co",
-      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkXVCJ9.exampleanonkey"
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkXVCJ9.exampleanonkey",
+      "eas": {
+        "projectId": "a494d3e4-3b3b-48b7-be8a-965e09808334"
+      }
     },
+
     "android": {
       "package": "com.anonymous.aielderhealthcareplus"
     }

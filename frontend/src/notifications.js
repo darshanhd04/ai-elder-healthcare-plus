@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import Constants from 'expo-constants'; // ✅ ADDED
 
 export async function registerForPushNotificationsAsync() {
   try {
@@ -14,10 +15,16 @@ export async function registerForPushNotificationsAsync() {
       return null;
     }
 
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log('📱 Push Token:', token);
+    // ✅ FIXED LINE (projectId added)
+    const token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      })
+    ).data;
 
+    console.log('📱 Push Token:', token);
     return token;
+
   } catch (e) {
     console.log('⚠️ Push error:', e.message);
     return null;
